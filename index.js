@@ -371,6 +371,96 @@ app.post("/api/sales", async (req, res) => {
     res.status(500).json({ message: err.message });
   }
 });
+// Get Daily Sales Summary
+app.get("/api/sales/summary", async (req, res) => {
+  try {
+    const summary = await salesCol
+      .aggregate([
+        {
+          $group: {
+            _id: {
+              $dateToString: { format: "%Y-%m-%d", date: "$sale_time" },
+            },
+            totalAmount: { $sum: "$total_amount" },
+            totalPaid: { $sum: "$total_paid" },
+            orderCount: { $sum: 1 },
+          },
+        },
+        { $sort: { _id: -1 } },
+      ])
+      .toArray();
+
+    res.json(summary);
+  } catch (err) {
+    res.status(500).json({ message: err.message });
+  }
+});
+// Get All Sales from a Specific Day
+app.get("/api/sales/by-date/:date", async (req, res) => {
+  try {
+    const date = req.params.date;
+    const start = new Date(date);
+    const end = new Date(date);
+    end.setDate(end.getDate() + 1);
+
+    const list = await salesCol
+      .aggregate([
+        {
+          $match: {
+            sale_time: { $gte: start, $lt: end },
+          },
+        },
+        {
+          $lookup: {
+            from: "customers",
+            localField: "customer_id",
+            foreignField: "_id",
+            as: "customer",
+          },
+        },
+        { $unwind: { path: "$customer", preserveNullAndEmptyArrays: true } },
+        { $sort: { sale_time: -1 } },
+      ])
+      .toArray();
+
+    res.json(list);
+  } catch (err) {
+    res.status(500).json({ message: err.message });
+  }
+});
+// Single Sale Details (Full A–Z Info)
+app.get("/api/sales/details/:id", async (req, res) => {
+  try {
+    const { id } = req.params;
+
+    const sale = await salesCol.findOne({ _id: new ObjectId(id) });
+
+    const items = await saleItemsCol
+      .aggregate([
+        {
+          $match: { sale_id: new ObjectId(id) },
+        },
+        {
+          $lookup: {
+            from: "products",
+            localField: "product_id",
+            foreignField: "_id",
+            as: "product",
+          },
+        },
+        { $unwind: "$product" },
+      ])
+      .toArray();
+
+    const customer = sale.customer_id
+      ? await customersCol.findOne({ _id: sale.customer_id })
+      : null;
+
+    res.json({ sale, items, customer });
+  } catch (err) {
+    res.status(500).json({ message: err.message });
+  }
+});
 
 // New Sell flow (Create sale + customer auto-create + due handling)
 app.post("/api/sell", async (req, res) => {
