@@ -9,7 +9,9 @@ Environment ConfigurationCreate a .env file in the root directory and add your c
 DB_URI=your_database_connection_string
 JWT_SECRET=your_super_secret_key
 
-📑 API Endpoints (Preview)MethodEndpointDescriptionGET/api/inventoryFetch all products in stock.POST/api/inventory/addAdd a new product to the system.PATCH/api/inventory/:idUpdate stock levels or price.DELETE/api/inventory/:idRemove a product from the database. 
+📑 API Endpoints (Preview)MethodEndpointDescriptionGET/api/inventoryFetch all products in stock.POST/api/inventory/addAdd a new product to the system.PATCH/api/inventory/:idUpdate stock levels or price.DELETE/api/inventory/:idRemove a product from the database.
+
+
 
 🤝 ContributingContributions make the open-source community an amazing place to learn and create.Fork the Project.Create your Feature Branch (git checkout -b feature/AmazingFeature).Commit your Changes (git commit -m 'Add some AmazingFeature').Push to the Branch (git push origin feature/AmazingFeature).Open a Pull Request. I will add.
 
