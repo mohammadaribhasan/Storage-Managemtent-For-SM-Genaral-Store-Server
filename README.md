@@ -2,6 +2,9 @@
 
 🚀 Key FeaturesReal-time Inventory Tracking: Monitor stock levels for thousands of SKUs instantly.Automated Restock Alerts: Triggers notifications when items fall below a defined threshold.Supplier Management: Maintain a database of vendors and linked product categories.Transaction Logging: Detailed history of sales and incoming stock for auditing.Role-Based Access: Secure endpoints for Admin and Staff levels.🛠 Tech StackComponentTechnologyRuntimeNode.js / Python (Specify yours)FrameworkExpress / FastAPI / DjangoDatabaseMongoDB / PostgreSQLAuthJWT (JSON Web Tokens)DocumentationSwagger / Postman
 
+
+
+
 ⚙️ Installation & SetupClone the RepositoryBashgit clone https://github.com/mohammadaribhasan/Storage-Managemtent-For-SM-Genaral-Store-Server.git
 cd Storage-Managemtent-For-SM-Genaral-Store-Server
 Install DependenciesBashnpm install  # or pip install -r requirements.txt
